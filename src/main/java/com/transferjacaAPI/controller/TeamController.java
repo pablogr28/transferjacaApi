@@ -52,6 +52,17 @@ public class TeamController {
 
     @PostMapping
     public ResponseEntity<?> add(@RequestBody @Valid TeamDTO teamDTO) {
+        if (teamService.existsByNameAndCountryAndYearFundation(teamDTO.getName(), teamDTO.getCountry(), teamDTO.getYearFundation())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                Map.of(
+                    "timestamp", LocalDateTime.now(),
+                    "status", 409,
+                    "error", "Conflict",
+                    "message", "Ya existe un equipo con el mismo nombre, país y año de fundación."
+                )
+            );
+        }
+
         Team team = new Team();
         team.setName(teamDTO.getName());
         team.setCountry(teamDTO.getCountry());
@@ -61,9 +72,8 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> edit(@RequestBody Team team, @PathVariable Long id) {
+    public ResponseEntity<?> edit(@RequestBody @Valid TeamDTO teamDTO, @PathVariable Long id) {
         Team existing = teamService.getTeamById(id);
         if (existing == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -75,8 +85,12 @@ public class TeamController {
                 )
             );
         }
-        team.setId(id);
-        return ResponseEntity.ok(teamService.saveTeam(team));
+
+        existing.setName(teamDTO.getName());
+        existing.setCountry(teamDTO.getCountry());
+        existing.setYearFundation(teamDTO.getYearFundation());
+
+        return ResponseEntity.ok(teamService.saveTeam(existing));
     }
 
     @DeleteMapping("/{id}")
@@ -93,6 +107,13 @@ public class TeamController {
             );
         }
         teamService.deleteTeam(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+            Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 200,
+                "message", "Equipo con ID " + id + " eliminado correctamente."
+            )
+        );
     }
+
 }

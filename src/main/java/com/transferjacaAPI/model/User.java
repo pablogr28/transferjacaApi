@@ -15,24 +15,20 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    private String role;
+    private String roles;
 
     public User() {
     }
 
-    public User(Long id, String username, String email, String password, String role) {
+    public User(Long id, String username, String email, String password, String roles) {
         this.id = id;
         this.username = username;
-        this.email = email;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
     }
 
     // Getters y setters
@@ -53,13 +49,7 @@ public class User {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    
 
     public String getPassword() {
         return password;
@@ -69,17 +59,19 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+    
 
     // hashCode y equals usando id
 
-    @Override
+    public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
+	@Override
     public int hashCode() {
         return Objects.hash(id);
     }

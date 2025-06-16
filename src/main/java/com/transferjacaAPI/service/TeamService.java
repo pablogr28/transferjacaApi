@@ -33,4 +33,9 @@ public class TeamService {
     public void deleteTeam(Long id) {
         teamRepository.deleteById(id);
     }
+    
+    public boolean existsByNameAndCountryAndYearFundation(String name, String country, Integer yearFundation) {
+        return teamRepository.existsByNameAndCountryAndYearFundation(name, country, yearFundation);
+    }
+
 }

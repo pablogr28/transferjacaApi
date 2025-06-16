@@ -17,6 +17,12 @@ public class PlayerTournamentId implements Serializable{
 
     public PlayerTournamentId() {}
 
+	public PlayerTournamentId(Long player, Long tournament) {
+		super();
+		this.player = player;
+		this.tournament = tournament;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(player, tournament);

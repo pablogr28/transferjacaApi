@@ -33,4 +33,10 @@ public class TournamentService {
     public void deleteTournament(Long id) {
         tournamentRepository.deleteById(id);
     }
+    
+    public boolean existsByNameAndCountryAndYear(String name, String country, Integer year) {
+        return tournamentRepository.existsByNameAndCountryAndYear(name, country, year);
+    }
+
+    
 }

@@ -10,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.transferjacaAPI.model.Tournament;
+import com.transferjacaAPI.model.TournamentDTO;
 import com.transferjacaAPI.service.TournamentService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tournaments")
@@ -41,13 +44,28 @@ public class TournamentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createTournament(@RequestBody Tournament tournament) {
+    public ResponseEntity<?> createTournament(@RequestBody @Valid TournamentDTO tournamentDto) {
+        if (tournamentService.existsByNameAndCountryAndYear(tournamentDto.getName(), tournamentDto.getCountry(), tournamentDto.getYear())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                Map.of(
+                    "timestamp", LocalDateTime.now(),
+                    "status", 409,
+                    "error", "Conflict",
+                    "message", "Ya existe un torneo con el mismo nombre, país y año."
+                )
+            );
+        }
+
+        Tournament tournament = new Tournament();
+        tournament.setName(tournamentDto.getName());
+        tournament.setCountry(tournamentDto.getCountry());
+        tournament.setYear(tournamentDto.getYear());
+
         Tournament saved = tournamentService.saveTournament(tournament);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
-
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTournament(@PathVariable Long id, @RequestBody Tournament tournament) {
+    public ResponseEntity<?> updateTournament(@PathVariable Long id, @RequestBody @Valid TournamentDTO tournamentDto) {
         Tournament existing = tournamentService.getTournamentById(id);
         if (existing == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -59,8 +77,14 @@ public class TournamentController {
                 )
             );
         }
-        tournament.setId(id);
-        return ResponseEntity.ok(tournamentService.saveTournament(tournament));
+
+        existing.setName(tournamentDto.getName());
+        existing.setCountry(tournamentDto.getCountry());
+        existing.setYear(tournamentDto.getYear());
+
+        Tournament updated = tournamentService.saveTournament(existing);
+
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
@@ -76,7 +100,15 @@ public class TournamentController {
                 )
             );
         }
+
         tournamentService.deleteTournament(id);
-        return ResponseEntity.noContent().build();
+
+        return ResponseEntity.ok(
+            Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", 200,
+                "message", "El torneo con ID " + id + " ha sido eliminado correctamente."
+            )
+        );
     }
 }

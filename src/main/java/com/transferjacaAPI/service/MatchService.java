@@ -33,4 +33,16 @@ public class MatchService {
     public void deleteMatch(Long id) {
         matchRepository.deleteById(id);
     }
+    
+    public boolean existsMatch(Match match) {
+        return matchRepository.findByDateAndGoalsHomeAndGoalsVisitAndTournamentMatchAndLocalTeamAndVisitTeam(
+            match.getDate(),
+            match.getGoalsHome(),
+            match.getGoalsVisit(),
+            match.getTournamentMatch(),
+            match.getLocalTeam(),
+            match.getVisitTeam()
+        ).isPresent();
+    }
+
 }

@@ -1,10 +1,13 @@
 package com.transferjacaAPI.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.transferjacaAPI.model.Player;
+import com.transferjacaAPI.model.Team;
 import com.transferjacaAPI.model.Transfer;
 import com.transferjacaAPI.repository.TransferRepository;
 
@@ -33,4 +36,9 @@ public class TransferService {
     public void deleteTransfer(Long id) {
         transferRepository.deleteById(id);
     }
+    
+    public boolean existsByPlayerAndFromTeamAndToTeamAndDateTransfer(Player player, Team fromTeam, Team toTeam, LocalDate dateTransfer) {
+        return transferRepository.existsByPlayerAndFromTeamAndToTeamAndDateTransfer(player, fromTeam, toTeam, dateTransfer);
+    }
+
 }

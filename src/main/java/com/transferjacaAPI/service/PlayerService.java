@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.transferjacaAPI.model.Player;
+import com.transferjacaAPI.model.Team;
 import com.transferjacaAPI.repository.PlayerRepository;
 
 @Service
@@ -34,5 +35,15 @@ public class PlayerService {
     public void deletePlayer(Long id) {
         playerRepository.deleteById(id);
     }
+    
+    public Optional<Player> getPlayerByName(String name) {
+        return playerRepository.findByName(name);
+    }
+
+    public boolean existsByNameAndPositionAndTeam(String name, String position, Team team) {
+        return playerRepository.existsByNameAndPositionAndTeam(name, position, team);
+    }
+
+
 }
 

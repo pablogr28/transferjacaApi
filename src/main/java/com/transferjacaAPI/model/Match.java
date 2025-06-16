@@ -32,12 +32,12 @@ public class Match {
 	@NotNull(message="El campo de los goles del equipo local debe ser obligatorio")
 	@Min(value=0,message="Los goles del equipo local debe ser como mínimo 0")
 	@Column(name="goles_local")
-	private String goals_home;
+	private String goalsHome;
 	
 	@NotNull(message="El campo de los goles del equipo visitante debe ser obligatorio")
 	@Min(value=0,message="Los goles del equipo visitante debe ser como mínimo 0")
 	@Column(name="goles_visitante")
-	private String goals_visit;
+	private String goalsVisit;
 	
 	@NotNull(message="El torneo debe ser obligatorio")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -56,17 +56,14 @@ public class Match {
 	@JoinColumn(name="equipo_visitante_id")
 	@JsonBackReference
 	private Team visitTeam;
-	
-	@Column(name="casa")
-	private Integer home;
 
-	public Match(Long id, LocalDate date, String goals_home, String goals_visit, Tournament tournament, Team localTeam,
+	public Match(Long id, LocalDate date, String goalsHome, String goalsVisit, Tournament tournament, Team localTeam,
 			Team visitTeam) {
 		super();
 		this.id = id;
 		this.date = date;
-		this.goals_home = goals_home;
-		this.goals_visit = goals_visit;
+		this.goalsHome = goalsHome;
+		this.goalsVisit = goalsVisit;
 		this.tournamentMatch = tournament;
 		this.localTeam = localTeam;
 		this.visitTeam = visitTeam;
@@ -92,20 +89,22 @@ public class Match {
 		this.date = date;
 	}
 
-	public String getGoals_home() {
-		return goals_home;
+	
+
+	public String getGoalsHome() {
+		return goalsHome;
 	}
 
-	public void setGoals_home(String goals_home) {
-		this.goals_home = goals_home;
+	public void setGoalsHome(String goalsHome) {
+		this.goalsHome = goalsHome;
 	}
 
-	public String getGoals_visit() {
-		return goals_visit;
+	public String getGoalsVisit() {
+		return goalsVisit;
 	}
 
-	public void setGoals_visit(String goals_visit) {
-		this.goals_visit = goals_visit;
+	public void setGoalsVisit(String goalsVisit) {
+		this.goalsVisit = goalsVisit;
 	}
 
 	public Tournament getTournamentMatch() {

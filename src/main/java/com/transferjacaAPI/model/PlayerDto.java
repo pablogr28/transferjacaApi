@@ -1,11 +1,13 @@
 package com.transferjacaAPI.model;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
-import java.util.List;
-
-import jakarta.validation.constraints.*;
-
-public class PlayerDto {
+public class PlayerDTO {
 
     @NotBlank(message = "El nombre es obligatorio")
     @Pattern(regexp = "^[^\\d]+$", message = "El nombre no debe contener números")
@@ -16,22 +18,22 @@ public class PlayerDto {
 
     private boolean active;
 
-    @Min(value = 15, message = "La edad mínima es de 15 años")
     @NotNull(message = "La edad es obligatoria")
+    @Min(value = 15, message = "La edad mínima es de 15 años")
     private Integer age;
 
-    @DecimalMin(value = "0.0", inclusive = false, message = "La estatura debe ser mayor a 0")
     @NotNull(message = "La estatura es obligatoria")
+    @DecimalMin(value = "0.0", inclusive = false, message = "La estatura debe ser mayor a 0")
     private Double stature;
 
-    @Positive(message = "El valor de mercado debe ser positivo")
     @NotNull(message = "El valor de mercado es obligatorio")
+    @Positive(message = "El valor de mercado debe ser positivo")
     private Double marketValue;
 
     @NotBlank(message = "La pierna fuerte es obligatoria")
     private String footFavourite;
 
-    @NotNull(message="El equipo es obligatorio")
+    @NotNull(message = "El equipo es obligatorio")
     private Long teamId;
 
     // Getters y setters
