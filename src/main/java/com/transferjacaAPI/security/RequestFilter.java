@@ -20,8 +20,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class RequestFilter extends OncePerRequestFilter {
 
 	private static final String[] WHITELIST = {
-	        "/api/usuarios/registrar",
-	        "/api/usuarios/login",
+	        "/users/registrar",
+	        "/users/login",
 	        "/swagger-ui/",
 	        "/v3/api-docs/"
 	    };

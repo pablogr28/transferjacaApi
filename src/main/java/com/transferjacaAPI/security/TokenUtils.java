@@ -16,7 +16,7 @@ import io.jsonwebtoken.security.Keys;
 
 public class TokenUtils {
 	//CREAMOS LA SEMILLA
-	private final static String ACCESS_TOKEN_SECRET="gimnasiovalhalla123gimnasiovalhalla12gimnasiovalhalla";
+	private final static String ACCESS_TOKEN_SECRET="transferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJacatransferJaca";
 	
 	//TIEMPO EN milisegundos 4 MINUTOS
 	// SOLO RECOMENDABLE EN UN PRINCIPIO MIENTRAS DESARROLLAMOS

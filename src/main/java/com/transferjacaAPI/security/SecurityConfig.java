@@ -2,6 +2,7 @@ package com.transferjacaAPI.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,31 +32,42 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
+        http.csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
+            .authorizeHttpRequests(auth -> auth
                 // Swagger abierto
                 .requestMatchers(
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui.html",
-                        "/swagger-resources/**",
-                        "/webjars/**"
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui.html",
+                    "/swagger-resources/**",
+                    "/webjars/**"
                 ).permitAll()
 
-                // Registro y Login públicos
-                .requestMatchers("/users/registrar", "/users/login","/users/**","/players/**","/matches/**","/player-tournaments/**","/teams/**","/tournaments/**","/transfers/**").permitAll()
+                // Registro y login públicos
+                .requestMatchers("/users/registrar", "/users/login").permitAll()
+
+                // GET públicos para todos
+                .requestMatchers(HttpMethod.GET, "/users/**", "/players/**", "/matches/**", "/player-tournaments/**", "/teams/**", "/tournaments/**", "/transfers/**").permitAll()
+
+                // POST, PUT y DELETE requieren autenticación
+                .requestMatchers(HttpMethod.POST, "/users/**", "/players/**", "/matches/**", "/player-tournaments/**", "/teams/**", "/tournaments/**", "/transfers/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/users/**", "/players/**", "/matches/**", "/player-tournaments/**", "/teams/**", "/tournaments/**", "/transfers/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/players/**", "/matches/**", "/player-tournaments/**", "/teams/**", "/tournaments/**", "/transfers/**").authenticated()
+
+                // DELETE a /users/** solo para ADMIN
+                .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
 
                 // Cualquier otra petición requiere autenticación
                 .anyRequest().authenticated()
-        );
-
-        http.csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint));
+            );
 
         http.addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     @Bean
     DaoAuthenticationProvider authenticationProvider(PasswordEncoder passwordEncoder) {

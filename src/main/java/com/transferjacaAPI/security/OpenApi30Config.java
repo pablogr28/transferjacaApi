@@ -15,7 +15,7 @@ public class OpenApi30Config {
     private final String moduleName;
     private final String apiVersion;
 
-    public OpenApi30Config(@Value("ValhallaCod") String moduleName, @Value("0.0.1-SNAPSHOT") String apiVersion) {
+    public OpenApi30Config(@Value("transferjacaAPI") String moduleName, @Value("0.0.1-SNAPSHOT") String apiVersion) {
         this.moduleName = moduleName;
         this.apiVersion = apiVersion;
     }

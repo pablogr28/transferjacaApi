@@ -49,7 +49,6 @@ public class UserController {
     })
     @PostMapping("/registrar")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO regDto) {
-        regDto.setPassword(passwordEncoder.encode(regDto.getPassword()));
         return ResponseEntity.ok(userService.saveUser(regDto));
     }
 
